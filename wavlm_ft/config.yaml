@@ -1,0 +1,69 @@
+# Data Configuration
+data:
+  data_file: "YOUR_DATA_FILE.jsonl"
+  vocab_file: "vocab_phoneme.json"
+  train_val_split: 0.95  # 95% train, 5% validation
+
+# Model Configuration
+model:
+  model_name: "microsoft/wavlm-large"
+  freeze_feature_extractor: true
+  ctc_loss_reduction: "mean"
+
+# Training Configuration
+training:
+  batch_size: 12  # WavLM-Large is heavy (300M+ params). Reduce if OOM.
+  accumulate_grad: 1 # Effective batch size = 1 * 16 = 16
+  learning_rate: 3e-5
+  num_epochs: 100
+  weight_decay: 0.005
+  gradient_clip_val: 1.0
+
+# Optimizer Configuration
+optimizer:
+  scheduler: "warmup_constant"  # Warmup + constant LR scheduler
+  warmup_ratio: 0.1  # Warmup percentage (fraction of total training steps)
+
+# DataLoader Configuration
+dataloader:
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+
+# Feature Extractor Configuration
+feature_extractor:
+  feature_size: 1
+  sampling_rate: 16000
+  padding_value: 0.0
+  do_normalize: true
+  return_attention_mask: false
+
+# Tokenizer Configuration
+tokenizer:
+  unk_token: "<UNK>"
+  pad_token: "<PAD>"
+  word_delimiter_token: "|"
+  do_lower_case: false
+
+# Output Configuration
+output:
+  output_dir: "/data/chenxu/checkpoints/wavlm_libri_phn_100_1229/"
+  checkpoint_filename: "wavlm-{epoch:02d}-{val_loss:.2f}"
+  save_top_k: 2
+  monitor_metric: "val_loss"
+  monitor_mode: "min"
+
+# Trainer Configuration
+trainer:
+  accelerator: "gpu"  # Will fallback to "cpu" if GPU not available
+  devices: [0, 2, 3, 6]
+  precision: "16-mixed"  # Saves memory, faster
+
+# Wandb Configuration
+wandb:
+  project: "wavlm-phoneme-finetuning"
+  name: null  # null means auto-generated name
+  tags: []
+  log_model: false  # Set to true to log model checkpoints to wandb
+  offline: false  # Set to true for offline mode
+

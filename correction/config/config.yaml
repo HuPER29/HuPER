@@ -1,0 +1,77 @@
+# Data configuration
+data:
+  vocab_path: "edit_seq_speech/config/vocab.json"
+  data_path: "DATASET_JSONL_FILE.jsonl"
+  val_data_path: null  # Set to validation data path, or null to split train data
+  val_split: 0.1  # Fraction of training data to use for validation (if val_data_path is null)
+  audio_vocab_size: 2048
+  num_workers: 4
+  pin_memory: true
+
+# Model architecture
+model:
+  d_model: 512  # Increased from 256 for better capacity
+  nhead: 8  # Increased to match d_model (should divide evenly)
+  num_layers: 8  # Increased from 4 for better representation
+  dropout: 0.2
+
+# Training configuration
+training:
+  batch_size: 64  # Reduced for stability, can increase with gradient accumulation
+  lr: 2.0e-4  # Standard learning rate
+  weight_decay: 0.01  # L2 regularization
+  max_epochs: 50  # More epochs for convergence
+  gradient_clip_val: 0.5  # Gradient clipping for stability
+  accumulate_grad_batches: 1 # Effective batch size = 16 * 4 = 64
+  val_check_interval: 0.5  # Validate every 0.5 epochs
+  precision: "bf16"  # Use bfloat16 for faster training
+
+# Optimizer configuration
+optimizer:
+  name: "adamw"  # "adamw" or "adam"
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+# Learning rate scheduler configuration
+scheduler:
+  type: "cosine"  # "cosine", "linear", "polynomial", or "reduce_on_plateau"
+  warmup_ratio: 0.1  # 10% of training steps for warmup
+  # For cosine scheduler
+  eta_min: 1.0e-6  # Minimum learning rate for cosine
+  # For reduce_on_plateau scheduler
+  factor: 0.5  # Reduce LR by this factor
+  patience: 3  # Wait 3 epochs before reducing
+  min_lr: 1.0e-6  # Minimum learning rate
+
+# Pytorch Lightning Trainer configuration
+trainer:
+  accelerator: "auto"
+  devices: [0, 1]
+  max_epochs: 50  # Should match training.max_epochs
+  log_every_n_steps: 50  # Log every 50 steps
+  enable_checkpointing: true
+  enable_progress_bar: true
+  enable_model_summary: true
+
+# Checkpointing configuration
+checkpoint:
+  monitor: "val_loss"  # Metric to monitor
+  mode: "min"  # "min" or "max"
+  save_top_k: 3  # Save top 3 checkpoints
+  save_last: true  # Always save last checkpoint
+  every_n_epochs: 1  # Save checkpoint every N epochs
+
+# Output configuration
+output:
+  output_dir: "OUTPUT_DIRECTORY"  # Directory for checkpoints and logs
+  experiment_name: "phoneme-corrector"  # Experiment name for organizing runs
+
+# Wandb configuration
+wandb:
+  enabled: true  # Enable/disable wandb logging
+  project: "phoneme-correction"  # Wandb project name
+  entity: null  # Your wandb entity/username, or null for default
+  name: null  # Specific run name, or null for auto-generated
+  tags: []  # Tags for organizing runs
+  log_model: false  # Whether to log model checkpoints to wandb
+  save_code: true  # Save code to wandb
