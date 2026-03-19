@@ -1,30 +1,5 @@
 # HuPER: A Human-Inspired Framework for Phonetic Perception
 
-[![arXiv](https://img.shields.io/badge/arXiv-2602.01634-b31b1b.svg)](https://arxiv.org/abs/2602.01634)
-[![🤗 Model](https://img.shields.io/badge/🤗%20Model-huper_recognizer-yellow.svg)](https://huggingface.co/huper29/huper_recognizer)
-[![🤗 Model](https://img.shields.io/badge/🤗%20Model-huper_corrector-yellow.svg)](https://huggingface.co/huper29/huper_corrector)
-[![🤗 Dataset](https://img.shields.io/badge/🤗%20Dataset-huper--clean100--proxyphones-yellow.svg)](https://huggingface.co/datasets/huper29/huper-clean100-proxyphones)
-
-HuPER is a human-inspired framework that models phonetic perception as adaptive inference integrating acoustic–phonetic evidence and linguistic knowledge.
-
-- Paper (arXiv): https://arxiv.org/abs/2602.01634  
-- Code: this repo  
-- Pretrained models & data: Hugging Face (links below)
-
----
-
-## Released artifacts (Hugging Face)
-
-- **HuPER Recognizer (phone recognition model)**  
-  https://huggingface.co/huper29/huper_recognizer
-
-- **HuPER Corrector (phoneme→phone correction model)**  
-  https://huggingface.co/huper29/huper_corrector
-
-- **Training dataset (Clean100 proxyphones)**  
-  https://huggingface.co/datasets/huper29/huper-clean100-proxyphones  
----
-
 ## Quickstart
 
 ### 1) Clone this repo
@@ -79,15 +54,3 @@ print(final_phns)
     
 
 ---
-
-## Citation
-
-If you use HuPER, please cite:
-
-```bibtex
-@article{guo2026huper,
-  title   = {HuPER: A Human-Inspired Framework for Phonetic Perception},
-  author  = {Guo, Chenxu and Lian, Jiachen and Liu, Yisi and Huang, Baihe and Narayanan, Shriyaa and Cho, Cheol Jun and Anumanchipalli, Gopala},
-  journal = {arXiv preprint arXiv:2602.01634},
-  year    = {2026}
-}
